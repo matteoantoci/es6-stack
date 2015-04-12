@@ -1,8 +1,9 @@
 ## ES6 Stack
 
-This is a boilerplate repo to make it easy to start an [ES6] ready project. 
-It's inspired by [es6-babel-browserify-boilerplate](https://github.com/thoughtram/es6-6to5-browserify-boilerplate.git).
-It based on Babel to transpile from ES6 to ES5 and Karma to leverage on TDD.
+This is a boilerplate repo to make it easy to start an [ES6] ready project.
+It supports Babel to transpile from ES6 to ES5 and Karma specs runner out of the box.
+
+Inspired by [es6-babel-browserify-boilerplate](https://github.com/thoughtram/es6-6to5-browserify-boilerplate.git).
 
 
 ### Initial setup
