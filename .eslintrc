@@ -1,0 +1,40 @@
+{
+  "parser": "babel-eslint",
+  "env" : {
+    "node" : true,
+    "browser" : true
+  },
+  "rules": {
+    "quotes": "single", // Enforce single quotes
+    "strict": false, // Don't require strict mode
+    // Lets you have a literal at the left of and if
+    // statement: if ('something' === variable) {
+    "no-yoda": false,
+    // Allow console.log
+    "no-console": false,
+    // Enforce this style:
+    // if (something) {
+    // } else {
+    // }
+    "brace-style": [2, "1tbs"],
+    // this is not allowed function (){
+    "no-spaced-func": [2, true],
+    // Enforce a valid jsdoc
+    "valid-jsdoc": [0, true],
+    // Enforce all variables being camel case
+    "camelcase": [2, true],
+    // Don't allow [ "hello" ]
+    "space-in-brackets": [2, "never"],
+    // Don't allo0w 1+1
+    "space-infix-ops": [2, true],
+    // There can only be one var statement inside a function
+    "one-var": [0, true],
+    // There has to be a space after if:
+    // if () {
+    "space-after-keywords": [2, "always"]
+  },
+  "globals" : {
+    "ActiveXObject": true,
+    "console": true
+  }
+}

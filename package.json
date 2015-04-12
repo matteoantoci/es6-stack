@@ -1,0 +1,37 @@
+{
+  "name": "e6-stack",
+  "version": "1.0.0",
+  "description": "A ES6 ready front-end stack",
+  "homepage": "https://github.com/matteoantoci/es6-stack",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/matteoantoci/es6-stack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matteoantoci/es6-stack/issues"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "babelify": "~5.0.3",
+    "browser-sync": "^1.7.1",
+    "browserify": "^6.3.3",
+    "gulp": "~3.8.10",
+    "gulp-rename": "^1.2.0",
+    "lodash": "^2.4.1",
+    "rimraf": "~2.2.8",
+    "watchify": "^2.1.1",
+    "vinyl-source-stream": "^1.0.0",
+    "gulp-eslint" : "latest",
+    "babel-eslint" : "latest",
+    "gulp-jasmine": "latest",
+    "gulp-karma": "latest",
+    "karma": "latest",
+    "karma-browserify": "latest",
+    "karma-jasmine": "latest",
+    "karma-phantomjs-launcher": "latest",
+    "karma-html2js-preprocessor": "~0.1"
+  },
+  "author": "Matteo Antoci <matteo.antoci@gmail.com>",
+  "license": "MIT"
+}
