@@ -29,6 +29,14 @@ gulp serve
 gulp watch
 ```
 
+# If you wanna Gulp to watch your unit tests...
+gulp spec
+```
+
+# If you wanna Gulp to watch your end2end tests, make sure the server is running and...
+gulp e2e
+```
+
 
 ### What are all the pieces involved?
 

@@ -30,7 +30,8 @@
     "karma-browserify": "latest",
     "karma-jasmine": "latest",
     "karma-phantomjs-launcher": "latest",
-    "karma-html2js-preprocessor": "~0.1"
+    "karma-html2js-preprocessor": "~0.1",
+    "gulp-protractor": "^1.0.0"
   },
   "author": "Matteo Antoci <matteo.antoci@gmail.com>",
   "license": "MIT"

@@ -11,12 +11,17 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var eslint = require('gulp-eslint');
 var karma = require('gulp-karma');
+var protractor = require('gulp-protractor').protractor;
+var webdriver_standalone = require('gulp-protractor').webdriver_standalone;
+var webdriver_update = require('gulp-protractor').webdriver_update;
 
 var config = {
     src : './src/**/*.js',
     entryFile: './src/app.js',
     outputDir: './dist/',
-    outputFile: 'app.js'
+    outputFile: 'app.js',
+    spec : 'spec/**/*.js',
+    e2e : 'e2e/**/*.js'
 };
 
 var bundler;
@@ -68,22 +73,26 @@ gulp.task('build', ['_build-persistent'], function() {
   process.exit(0);
 });
 
-// build files and watch them
-gulp.task('watch', ['_build-persistent'], function() {
-  runBrowserSync();
-  getBundler().on('update', function() {
-    gulp.start('build-persistent')
-  });
-});
+gulp.task('webdriver_update', webdriver_update);
+gulp.task('webdriver_standalone', webdriver_standalone);
 
-// WEB SERVER
+/*** PUBLIC TASKS ***/
+
+// START WEB SERVER
 gulp.task('serve', function () {
-  runBrowserSync();
+    runBrowserSync();
 });
 
-//SPECS
-gulp.task('specs', function () {
-    return gulp.src('spec/**/*.js')
+// BUILD FILES AND WATCH THEM
+gulp.task('watch', ['_build-persistent', 'serve'], function() {
+    getBundler().on('update', function() {
+        gulp.start('build-persistent')
+    });
+});
+
+//UNIT TESTS
+gulp.task('spec', function () {
+    return gulp.src(config.spec)
         .pipe(karma({
             configFile: 'karma.conf.js',
             action: 'start'
@@ -91,4 +100,14 @@ gulp.task('specs', function () {
         .on('error', function(err) {
             throw err;
         });
+});
+
+//END2END TESTS
+gulp.task('e2e', ['webdriver_update'], function() {
+    gulp.src(config.e2e)
+        .pipe(protractor({
+            configFile: "protractor.conf.js",
+            args: ['--baseUrl', 'http://localhost:3000']
+        }))
+        .on('error', function(e) { throw e })
 });
