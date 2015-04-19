@@ -12,6 +12,3 @@ describe('my app', function() {
     });
 
 });
-
-
-

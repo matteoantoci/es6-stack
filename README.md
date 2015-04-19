@@ -20,7 +20,7 @@ npm install
 npm install -g gulp
 ```
 
-### Running in the browser
+### Running the BrowserSync server
 ```bash
 gulp build
 gulp serve

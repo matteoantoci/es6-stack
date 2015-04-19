@@ -35,6 +35,10 @@
   },
   "globals" : {
     "ActiveXObject": true,
-    "console": true
+    "console": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "browser": true
   }
 }

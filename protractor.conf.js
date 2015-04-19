@@ -27,6 +27,8 @@ exports.config = {
         defaultTimeoutInterval: 30000
     },
 
+    framework: 'jasmine',
+
     directConnect: true,
 
     onPrepare: function() {
