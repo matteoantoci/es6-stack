@@ -7,7 +7,7 @@ var babelify = require('babelify');
 var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
 var _ = require('lodash');
-var browserSync = require('browser-sync');
+var bs = require("browser-sync").create();
 var eslint = require('gulp-eslint');
 var karma = require('gulp-karma');
 var protractor = require('gulp-protractor').protractor;
@@ -47,13 +47,13 @@ function bundle() {
         })
         .pipe(source(config.outputFile))
         .pipe(gulp.dest(config.outputDir))
-        .pipe(browserSync.reload({
+        .pipe(bs.reload({
             stream: true
         }));
 }
 
 function runBrowserSync(){
-    browserSync({
+    bs.init({
         server: {
             baseDir: './'
         }
