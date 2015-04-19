@@ -27,11 +27,9 @@ gulp serve
 
 # If you wanna Gulp to re-build on every change...
 gulp watch
-```
 
 # If you wanna Gulp to watch your unit tests...
 gulp spec
-```
 
 # If you wanna Gulp to watch your end2end tests, make sure the server is running and...
 gulp e2e
