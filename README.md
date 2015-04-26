@@ -38,6 +38,9 @@ gulp e2e
 
 ### What are all the pieces involved?
 
+#### [BrowserSync]
+Run a local server and sync file changes and interactions across multiple devices. Remote debugging out of the box!
+
 #### [Babel]
 Transpiles ES6 code into regular ES5 (today's JavaScript) so that it can be run in a today browser. 
 Like traceur but doesn't need a runtime to work. Formerly known as 6to5.
@@ -58,6 +61,7 @@ Linting utility to write better ES6 code.
 #### [Karma]
 Really simple and powerful test suite runner.
 
+[BrowserSync]: http://www.browsersync.io/
 [ES6]: http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts
 [Babel]: http://babeljs.io/
 [CommonJS]: http://wiki.commonjs.org/wiki/CommonJS
