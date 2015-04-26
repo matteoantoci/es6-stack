@@ -13,14 +13,22 @@ var karma = require('gulp-karma');
 var protractor = require('gulp-protractor').protractor;
 var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
+var sass = require('gulp-sass');
+var bower = require('gulp-bower');
 
 var config = {
-    src: './src/**/*.js',
-    entryFile: './src/app.js',
-    outputDir: './dist/',
-    outputFile: 'app.js',
-    spec: 'spec/**/*.js',
-    e2e: 'e2e/**/*.js'
+    js: {
+        src: './src/**/*.js',
+        entryFile: './src/app.js',
+        outputDir: './dist/js/',
+        outputFile: 'app.js',
+        spec: 'spec/**/*.js',
+        e2e: 'e2e/**/*.js'
+    },
+    css: {
+        source: './assets/scss/*.scss',
+        dest: './dist/css/'
+    }
 };
 
 // ESlint
@@ -33,7 +41,7 @@ function lint(src) {
 var bundler;
 function getBundler() {
     if (!bundler) {
-        bundler = watchify(browserify(config.entryFile, _.extend({debug: true}, watchify.args)));
+        bundler = watchify(browserify(config.js.entryFile, _.extend({debug: true}, watchify.args)));
     }
     return bundler;
 }
@@ -42,17 +50,17 @@ function bundle() {
     return getBundler()
         .transform(babelify)
         .bundle()
-        .on('error', function(err) {
+        .on('error', function (err) {
             throw err;
         })
-        .pipe(source(config.outputFile))
-        .pipe(gulp.dest(config.outputDir))
+        .pipe(source(config.js.outputFile))
+        .pipe(gulp.dest(config.js.outputDir))
         .pipe(bs.reload({
             stream: true
         }));
 }
 
-function runBrowserSync(){
+function runBrowserSync() {
     bs.init({
         server: {
             baseDir: './'
@@ -61,13 +69,27 @@ function runBrowserSync(){
 }
 
 // clean the output directory
-gulp.task('_clean', function(cb){
-    rimraf(config.outputDir, cb);
+gulp.task('_clean', function (cb) {
+    rimraf(config.js.outputDir, cb);
+});
+
+//BOWER
+gulp.task('bower', function () {
+    return bower();
+});
+
+//SCSS
+gulp.task('sass', ['bower'], function () {
+    gulp.src(config.css.source)
+        .pipe(sass({
+            outputStyle: 'compressed'
+        }))
+        .pipe(gulp.dest(config.css.dest));
 });
 
 // bundle and write files
-gulp.task('_build-persistent', ['_clean'], function() {
-    lint(config.src);
+gulp.task('_build-persistent', ['_clean', 'sass'], function () {
+    lint(config.js.src);
     return bundle();
 });
 
@@ -84,37 +106,37 @@ gulp.task('serve', function () {
 });
 
 // Build files and exit
-gulp.task('build', ['_build-persistent'], function() {
+gulp.task('build', ['_build-persistent'], function () {
     process.exit(0);
 });
 
 // BUILD FILES AND WATCH THEM
-gulp.task('watch', ['_build-persistent', 'serve'], function() {
-    getBundler().on('update', function() {
+gulp.task('watch', ['_build-persistent', 'serve'], function () {
+    getBundler().on('update', function () {
         gulp.start('_build-persistent');
     });
 });
 
 //UNIT TESTS
 gulp.task('spec', function () {
-    return lint(config.spec)
+    return lint(config.js.spec)
         .pipe(karma({
             configFile: 'karma.conf.js',
             action: 'watch'
         }))
-        .on('error', function(err) {
+        .on('error', function (err) {
             throw err;
         });
 });
 
 //END2END TESTS
-gulp.task('e2e', ['webdriverUpdate'], function() {
-    return lint(config.e2e)
+gulp.task('e2e', ['webdriverUpdate'], function () {
+    return lint(config.js.e2e)
         .pipe(protractor({
             configFile: "protractor.conf.js",
             args: ['--baseUrl', 'http://localhost:3000']
         }))
-        .on('error', function(e) {
+        .on('error', function (e) {
             throw e;
         });
 });
