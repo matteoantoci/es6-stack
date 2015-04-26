@@ -15,6 +15,7 @@ var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var sass = require('gulp-sass');
 var bower = require('gulp-bower');
+var sourcemaps = require('gulp-sourcemaps');
 
 var config = {
     js: {
@@ -81,9 +82,11 @@ gulp.task('bower', function () {
 //SCSS
 gulp.task('sass', ['bower'], function () {
     gulp.src(config.css.source)
+        .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed'
         }))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest(config.css.dest));
 });
 
