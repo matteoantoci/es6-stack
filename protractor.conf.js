@@ -9,9 +9,10 @@ exports.config = {
     //seleniumAddress: 'http://localhost:4444/wd/hub',
 
     // Capabilities to be passed to the webdriver instance.
-    multiCapabilities: [{
+    // TODO: firefox 38 is not compatible with selenium 2.45, re-enable it in future
+    multiCapabilities: [/*{
         'browserName': 'firefox'
-    }, {
+    },*/ {
         'browserName': 'chrome'
     }],
 
@@ -31,7 +32,7 @@ exports.config = {
 
     directConnect: true,
 
-    onPrepare: function() {
+    onPrepare: function () {
         browser.ignoreSynchronization = true;
     }
 
