@@ -17,28 +17,7 @@ var sass = require('gulp-sass');
 var bower = require('gulp-bower');
 var sourcemaps = require('gulp-sourcemaps');
 
-var paths = {
-    assets: './assets/',
-    dist: './dist/'
-};
-
-var config = {
-    js: {
-        src: paths.assets + 'js/src/**/*.js',
-        entryFile: paths.assets + 'js/src/app.js',
-        spec: paths.assets + 'js/spec/**/*.js',
-        e2e: paths.assets + 'js/e2e/**/*.js',
-        outputDir: paths.dist + 'js/',
-        outputFile: 'app.js'
-    },
-    css: {
-        src: paths.assets + 'scss/*.scss',
-        dest: paths.dist + 'css/'
-    },
-    browserSync: {
-        proxy: false
-    }
-};
+var config = require('./gulp.config');
 
 // ESlint
 function lint(src) {
@@ -141,7 +120,7 @@ gulp.task('spec', function () {
         .pipe(karma({
             configFile: 'karma.conf.js',
             files: config.js.src,
-            basePath: paths.assets,
+            basePath: config.paths.assets,
             action: 'watch'
         }))
         .on('error', function (err) {
