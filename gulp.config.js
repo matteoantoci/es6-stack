@@ -13,25 +13,15 @@ var paths = {
 
 module.exports = {
     paths: paths,
+    watchedFiles: paths.assets + '/**/*.*',
     js: {
         src: paths.assets + '/js/src/**/*.js',
         entryFile: paths.assets + '/js/src/app.js',
         spec: paths.assets + '/js/spec/**/*.js',
-        e2e: paths.assets + '/js/e2e/**/*.js',
-        outputDir: paths.dist + '/js/',
-        outputFile: 'app.js'
-    },
-    css: {
-        src: paths.assets + '/scss/*.scss',
-        dest: paths.dist + '/css/'
+        e2e: paths.assets + '/js/e2e/**/*.js'
     },
     browserSync: {
         proxy: false
-    },
-    webpackOptions: {
-        debug: true,
-        devtool: '#source-map',
-        watchDelay: 200
     },
     webpackConfig: {
         useMemoryFs: true,

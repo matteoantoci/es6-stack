@@ -1,21 +1,17 @@
 'use strict';
 
 var gulp = require('gulp');
+var webpack = require('gulp-webpack-build');
 var browserify = require('browserify');
-var watchify = require('watchify');
 var babelify = require('babelify');
 var rimraf = require('rimraf');
-var source = require('vinyl-source-stream');
-var _ = require('lodash');
 var bs = require("browser-sync").create();
 var eslint = require('gulp-eslint');
 var karma = require('gulp-karma');
 var protractor = require('gulp-protractor').protractor;
 var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
-var sass = require('gulp-sass');
 var bower = require('gulp-bower');
-var sourcemaps = require('gulp-sourcemaps');
 
 var config = require('./gulp.config');
 
@@ -26,32 +22,31 @@ function lint(src) {
         .pipe(eslint.format());
 }
 
-var bundler;
-function getBundler() {
-    if (!bundler) {
-        bundler = watchify(browserify(config.js.entryFile, _.extend({debug: true}, watchify.args)));
-    }
-    return bundler;
-}
-
 function bundle() {
-    return getBundler()
-        .transform(babelify)
-        .bundle()
-        .on('error', function (err) {
-            throw err;
-        })
-        .pipe(source(config.js.outputFile))
-        .pipe(gulp.dest(config.js.outputDir))
-        .pipe(bs.reload({
-            stream: true
-        }));
+    return gulp.src(webpack.config.CONFIG_FILENAME)
+        .pipe(webpack.init(config.webpackConfig))
+        //.pipe(webpack.props(config.webpackOptions)) //Overrides
+        .pipe(webpack.run(function (err, stats) {
+            if (err) {
+                console.log('Error', err);
+            } else {
+                console.log(stats.toString());
+            }
+        }))
+        .pipe(webpack.format({
+            version: false,
+            timings: true
+        }))
+        .pipe(webpack.failAfter({
+            errors: true,
+            warnings: true
+        }))
+        .pipe(gulp.dest(config.paths.dist));
 }
 
 // clean the output directory
 gulp.task('_clean', function (cb) {
-    rimraf(config.js.outputDir, function(){});
-    rimraf(config.css.dest, cb);
+    rimraf(config.paths.dist, cb);
 });
 
 //BOWER
@@ -59,22 +54,8 @@ gulp.task('bower', function () {
     return bower();
 });
 
-//SCSS
-gulp.task('sass', ['bower'], function () {
-    gulp.src(config.css.src)
-        .pipe(sourcemaps.init())
-        .pipe(sass({
-            outputStyle: 'compressed'
-        }))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(config.css.dest))
-        .pipe(bs.reload({
-            stream: true
-        }));
-});
-
 // bundle and write files
-gulp.task('_build-persistent', ['_clean', 'sass'], function () {
+gulp.task('_build-persistent', ['_clean', 'bower'], function () {
     lint(config.js.src);
     return bundle();
 });
@@ -90,7 +71,7 @@ gulp.task('webdriverStandalone', webdriverStandalone);
 gulp.task('serve', function () {
     var initOptions = {};
 
-    if (config.browserSync.proxy){
+    if (config.browserSync.proxy) {
         initOptions.proxy = config.browserSync.proxy;
     } else {
         initOptions.server = {
@@ -108,9 +89,10 @@ gulp.task('build', ['_build-persistent'], function () {
 
 // BUILD FILES AND WATCH THEM
 gulp.task('watch', ['_build-persistent', 'serve'], function () {
-    gulp.watch(config.css.src, ['sass']);
-    getBundler().on('update', function () {
-        gulp.start('_build-persistent');
+    gulp.watch(config.watchedFiles).on('change', function(event) {
+        if (event.type === 'changed') {
+            bundle();
+        }
     });
 });
 
