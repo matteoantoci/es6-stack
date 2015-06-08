@@ -2,8 +2,6 @@
 
 var gulp = require('gulp');
 var webpack = require('gulp-webpack-build');
-var browserify = require('browserify');
-var babelify = require('babelify');
 var rimraf = require('rimraf');
 var bs = require("browser-sync").create();
 var eslint = require('gulp-eslint');
@@ -101,7 +99,10 @@ gulp.task('spec', function () {
     return lint(config.js.spec)
         .pipe(karma({
             configFile: 'karma.conf.js',
-            files: config.js.src,
+            files: {
+                pattern: config.js.src,
+                watched: false
+            },
             basePath: config.paths.assets,
             action: 'watch'
         }))

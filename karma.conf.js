@@ -1,19 +1,31 @@
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
-
         basePath: '',
-        frameworks: ['browserify', 'jasmine'],
+        frameworks: ['jasmine'],
 
-        exclude: [
-        ],
+        colors: true,
+
+        exclude: [],
 
         preprocessors: {
-            '**/*.js': ['browserify']
+            '**/*.js': ['webpack', 'sourcemap']
         },
 
-        browserify: {
-            debug: true,
-            transform: ['babelify']
+        webpack: {
+            module: {
+                loaders: [
+                    {
+                        test: /\.js?$/,
+                        exclude: /node_modules/,
+                        loader: 'babel-loader'
+                    }
+                ]
+            },
+            devtool: 'inline-source-map'
+        },
+
+        webpackMiddleware: {
+            noInfo: true
         },
 
         browsers: ['PhantomJS'],
