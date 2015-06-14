@@ -1,7 +1,9 @@
 'use strict';
 
 var gulp = require('gulp');
-var webpack = require('gulp-webpack-build');
+var gutil = require('gulp-util');
+var webpack = require('webpack');
+var webpackConfig = require("./webpack.config.js");
 var rimraf = require('rimraf');
 var bs = require("browser-sync").create();
 var eslint = require('gulp-eslint');
@@ -10,7 +12,6 @@ var protractor = require('gulp-protractor').protractor;
 var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var bower = require('gulp-bower');
-
 var config = require('./gulp.config');
 
 // ESlint
@@ -20,31 +21,22 @@ function lint(src) {
         .pipe(eslint.format());
 }
 
-function bundle() {
-    return gulp.src(webpack.config.CONFIG_FILENAME)
-        .pipe(webpack.init(config.webpackConfig))
-        //.pipe(webpack.props(config.webpackOptions)) //Overrides
-        .pipe(webpack.run(function (err, stats) {
-            if (err) {
-                console.log('Error', err);
-            } else {
-                console.log(stats.toString());
-            }
-        }))
-        .pipe(webpack.format({
-            version: false,
-            timings: true
-        }))
-        .pipe(webpack.failAfter({
-            errors: true,
-            warnings: true
-        }))
-        .pipe(gulp.dest(config.paths.dist));
+// Webpack
+function webpackBuild(conf, callback){
+    webpack(conf, function (err, stats) {
+        if (err) {
+            throw new gutil.PluginError("webpack", err);
+        }
+        gutil.log("webpack", stats.toString({
+            colors: true
+        }));
+        callback();
+    });
 }
 
 // clean the output directory
-gulp.task('_clean', function (cb) {
-    rimraf(config.paths.dist, cb);
+gulp.task('clean', function (cb) {
+    return rimraf(config.paths.dist, cb);
 });
 
 //BOWER
@@ -52,24 +44,13 @@ gulp.task('bower', function () {
     return bower();
 });
 
-// bundle and write files
-gulp.task('_build-persistent', ['_clean', 'bower'], function () {
-    lint(config.js.src);
-    return bundle();
-});
-
 gulp.task('webdriverUpdate', webdriverUpdate);
 gulp.task('webdriverStandalone', webdriverStandalone);
 
-/********************/
-/*** PUBLIC TASKS ***/
-/********************/
-
-// START WEB SERVER
-gulp.task('serve', function () {
+gulp.task('default', ['clean', 'bower', "webpack:build-dev"], function() {
     var initOptions = {};
 
-    if (config.browserSync.proxy) {
+    if (config.browserSync.proxy){
         initOptions.proxy = config.browserSync.proxy;
     } else {
         initOptions.server = {
@@ -78,20 +59,39 @@ gulp.task('serve', function () {
     }
 
     bs.init(initOptions);
+    gulp.watch(config.watchedFiles, ["webpack:build-dev"]);
+    gulp.watch(config.paths.dist + '**/*.css').on('change', bs.stream);
+    gulp.watch(config.paths.dist + '**/*.js').on('change', bs.reload);
+    /*
+    gulp
+        .watch(paths.src + '/icons/*.svg', ['icons'])
+        .on('change', bs.reload);
+        */
 });
 
-// Build files and exit
-gulp.task('build', ['_build-persistent'], function () {
-    process.exit(0);
+// Production build
+gulp.task("build", ['clean', 'bower', "webpack:build"]);
+
+gulp.task("webpack:build", function (callback) {
+    var myConfig = Object.create(webpackConfig);
+    myConfig.debug = false;
+    myConfig.plugins = myConfig.plugins.concat(
+        new webpack.DefinePlugin({
+            "process.env": {
+                "NODE_ENV": JSON.stringify("production")
+            }
+        }),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.UglifyJsPlugin()
+    );
+    webpackBuild(myConfig, callback);
 });
 
-// BUILD FILES AND WATCH THEM
-gulp.task('watch', ['_build-persistent', 'serve'], function () {
-    gulp.watch(config.watchedFiles).on('change', function(event) {
-        if (event.type === 'changed') {
-            bundle();
-        }
-    });
+gulp.task("webpack:build-dev", function (callback) {
+    var myDevConfig = Object.create(webpackConfig);
+    myDevConfig.devtool = '#source-map';
+    lint(config.js.src);
+    webpackBuild(myDevConfig, callback);
 });
 
 //UNIT TESTS

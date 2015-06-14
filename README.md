@@ -20,13 +20,12 @@ npm install
 npm install -g gulp
 ```
 
-### Running the BrowserSync server
+### Watch dev assets
 ```bash
-gulp build
-gulp serve
+gulp
 
-# If you wanna Gulp to re-build on every change...
-gulp watch
+# Build prod assets...
+gulp build
 
 # If you wanna Gulp to watch your unit tests...
 gulp spec
@@ -38,6 +37,9 @@ gulp e2e
 
 ### What are all the pieces involved?
 
+#### [Gulp]
+Task runner to make defining and running the tasks simpler.
+
 #### [BrowserSync]
 Run a local server and sync file changes and interactions across multiple devices. Remote debugging out of the box!
 
@@ -45,15 +47,8 @@ Run a local server and sync file changes and interactions across multiple device
 Transpiles ES6 code into regular ES5 (today's JavaScript) so that it can be run in a today browser. 
 Like traceur but doesn't need a runtime to work. Formerly known as 6to5.
 
-#### [CommonJS]
-Babel is configured to transpile ES6 modules into CommonJS syntax and we use Browserify to bundle the code into
-one file to deliver it to the browser.
-
-#### [Browserify]
-Browserify walks through all files and traces down all `require()`s to bundle all files together.  
-
-#### [Gulp]
-Task runner to make defining and running the tasks simpler.
+#### [Webpack]
+Webpack walks through all files and traces down all `require()`s to bundle all files together.
 
 #### [ESLint]
 Linting utility to write better ES6 code.
@@ -65,7 +60,7 @@ Really simple and powerful test suite runner.
 [ES6]: http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts
 [Babel]: http://babeljs.io/
 [CommonJS]: http://wiki.commonjs.org/wiki/CommonJS
-[Browserify]: http://browserify.org/
+[Webpack]: http://webpack.github.io/
 [Gulp]: http://gulpjs.com/
 [ESLint]: http://eslint.org/
 [Karma]: http://karma-runner.github.io/

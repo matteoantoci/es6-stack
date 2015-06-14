@@ -11,9 +11,18 @@ var paths = {
     dist: path.resolve('./dist/')
 };
 
+var devProxy = {
+    host: "localhost",
+    port: 8080
+};
+
 module.exports = {
     paths: paths,
+    devProxy: devProxy,
     watchedFiles: paths.assets + '/**/*.*',
+    css: {
+        src: paths.assets + '/scss/src/**/*.scss'
+    },
     js: {
         src: paths.assets + '/js/src/**/*.js',
         entryFile: paths.assets + '/js/src/app.js',
@@ -21,10 +30,7 @@ module.exports = {
         e2e: paths.assets + '/js/e2e/**/*.js'
     },
     browserSync: {
+        //proxy: devProxy.host + ":" + devProxy.port
         proxy: false
-    },
-    webpackConfig: {
-        useMemoryFs: true,
-        progress: true
     }
 };
