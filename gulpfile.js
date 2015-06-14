@@ -11,6 +11,7 @@ var karma = require('gulp-karma');
 var protractor = require('gulp-protractor').protractor;
 var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
+var bower = require('gulp-bower');
 var config = require('./gulp.config');
 
 // ESlint
@@ -38,10 +39,15 @@ gulp.task('clean', function (cb) {
     return rimraf(config.paths.dist, cb);
 });
 
+//BOWER
+gulp.task('bower', function () {
+    return bower();
+});
+
 gulp.task('webdriverUpdate', webdriverUpdate);
 gulp.task('webdriverStandalone', webdriverStandalone);
 
-gulp.task('default', ['clean', "webpack:build-dev"], function() {
+gulp.task('default', ['clean', 'bower', "webpack:build-dev"], function() {
     var initOptions = {};
 
     if (config.browserSync.proxy){
@@ -64,7 +70,7 @@ gulp.task('default', ['clean', "webpack:build-dev"], function() {
 });
 
 // Production build
-gulp.task("build", ['clean', "webpack:build"]);
+gulp.task("build", ['clean', 'bower', "webpack:build"]);
 
 gulp.task("webpack:build", function (callback) {
     var myConfig = Object.create(webpackConfig);

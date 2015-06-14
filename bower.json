@@ -1,0 +1,19 @@
+{
+  "name": "es6-stack",
+  "version": "1.0.0",
+  "homepage": "https://github.com/matteoantoci/es6-stack",
+  "authors": [
+    "mantoci <mantoci@ebay.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-scss": "appleboy/normalize.scss#~3.0.3"
+  }
+}
