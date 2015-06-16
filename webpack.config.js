@@ -1,4 +1,5 @@
 var config = require('./gulp.config');
+var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -25,15 +26,32 @@ module.exports = {
                 exclude: /node_modules|bower_components/,
                 loader: 'babel-loader'
             },
-            {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
-            {test: /\.scss$/, loader: ExtractTextPlugin.extract('css?sourceMap!sass?sourceMap')},
+            {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract('css-loader?sourceMap!sass-loader?sourceMap=true&sourceMapContents=true&')
+                +
+                "includePaths[]=" +
+                (path.resolve(__dirname, "./bower_components")) + "&" +
+                "includePaths[]=" +
+                (path.resolve(__dirname, "./node_modules"))
+            },
+            {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap")},
             {test: /\.woff$/, loader: "url-loader?prefix=font/&limit=5000&mimetype=application/font-woff"},
             {test: /\.ttf$/, loader: "file-loader?prefix=font/"},
             {test: /\.eot$/, loader: "file-loader?prefix=font/"},
             {test: /\.svg$/, loader: "file-loader?prefix=font/"},
+            {test: /\.gif$/, loader: "url?limit=10000&mimetype=image/gif"},
+            {test: /\.jpg$/, loader: "url?limit=10000&mimetype=image/jpg"},
+            {test: /\.png$/, loader: "url?limit=10000&mimetype=image/png"}
         ]
     },
     plugins: [
         new ExtractTextPlugin("[name].css")
-    ]
+    ],
+    resolve: {
+        modulesDirectories: [
+            'bower_components',
+            'node_modules'
+        ]
+    }
 };
