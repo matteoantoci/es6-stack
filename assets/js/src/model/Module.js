@@ -1,11 +1,11 @@
 class Module {
 
-    constructor(){
-        this.msg = "Hello world!";
+    constructor() {
+        this.msg = 'Hello world!';
     }
 
-    getMessage(){
-      return this.msg;
+    getMessage() {
+        return this.msg;
     }
 
 }
