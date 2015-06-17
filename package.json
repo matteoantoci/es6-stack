@@ -10,7 +10,9 @@
   "bugs": {
     "url": "https://github.com/matteoantoci/es6-stack/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node.normalize.scss": "^3.0.3"
+  },
   "devDependencies": {
     "babel-core": "^5.5.4",
     "babel-eslint": "latest",
@@ -19,7 +21,6 @@
     "css-loader": "^0.14.4",
     "extract-text-webpack-plugin": "^0.8.1",
     "gulp": "latest",
-    "gulp-bower": "0.0.10",
     "gulp-eslint": "latest",
     "gulp-jasmine": "latest",
     "gulp-karma": "latest",
@@ -38,6 +39,9 @@
     "style-loader": "^0.12.3",
     "webpack": "^1.9.11",
     "webpack-config": "^0.7.0"
+  },
+  "scripts": {
+    "gulp": "gulp"
   },
   "author": "Matteo Antoci <matteo.antoci@gmail.com>",
   "license": "MIT"
