@@ -13,15 +13,16 @@ var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var config = require('./gulp.config');
 
-// ESlint
-function lint(src) {
-    return gulp.src(src)
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
-}
+// WEBDRIVER
+gulp.task('webdriverUpdate', webdriverUpdate);
+gulp.task('webdriverStandalone', webdriverStandalone);
 
-// Webpack
+// CLEAN THE OUTPUT DIRECTORY
+gulp.task('clean', function clean(cb) {
+    return rimraf(config.paths.dist, cb);
+});
+
+// WEBPACK
 function webpackBuild(conf, callback) {
     webpack(conf, function run(err, stats) {
         if (err) {
@@ -34,15 +35,8 @@ function webpackBuild(conf, callback) {
     });
 }
 
-// clean the output directory
-gulp.task('clean', function clean(cb) {
-    return rimraf(config.paths.dist, cb);
-});
-
-gulp.task('webdriverUpdate', webdriverUpdate);
-gulp.task('webdriverStandalone', webdriverStandalone);
-
-gulp.task('default', ['clean', 'webpack:build-dev'], function() {
+// DEFAULT - BrowserSync
+gulp.task('default', ['clean', 'webpack:build-dev'], function browserSync() {
     var initOptions = {};
 
     if (config.browserSync.proxy) {
@@ -57,17 +51,11 @@ gulp.task('default', ['clean', 'webpack:build-dev'], function() {
     gulp.watch(config.watchedFiles, ['webpack:build-dev']);
     gulp.watch(config.paths.dist + '**/*.css').on('change', bs.stream);
     gulp.watch(config.paths.dist + '**/*.js').on('change', bs.reload);
-    /*
-     gulp
-     .watch(paths.src + '/icons/*.svg', ['icons'])
-     .on('change', bs.reload);
-     */
+    // gulp.watch(paths.src + '/icons/*.svg', ['icons']).on('change', bs.reload);
 });
 
-// Production build
-gulp.task('build', ['clean', 'webpack:build']);
-
-gulp.task('webpack:build', function webpackbuild(callback) {
+// WEBPACK PROD
+gulp.task('build', ['clean'], function wpBuild(callback) {
     var myConfig = Object.create(webpackConfig);
     myConfig.debug = false;
     myConfig.plugins = myConfig.plugins.concat(
@@ -82,7 +70,8 @@ gulp.task('webpack:build', function webpackbuild(callback) {
     webpackBuild(myConfig, callback);
 });
 
-gulp.task('webpack:build-dev', function webpackbuildDev(callback) {
+// WEBPACK DEV
+gulp.task('webpack:build-dev', function wpBuildDev(callback) {
     var myDevConfig = Object.create(webpackConfig);
     myDevConfig.devtool = '#source-map';
     webpackBuild(myDevConfig, callback);
@@ -90,7 +79,10 @@ gulp.task('webpack:build-dev', function webpackbuildDev(callback) {
 
 // UNIT TESTS
 gulp.task('spec', function spec() {
-    return lint(config.js.spec)
+    return gulp.src(config.js.spec)
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
         .pipe(karma({
             configFile: 'karma.conf.js',
             files: {
@@ -107,7 +99,10 @@ gulp.task('spec', function spec() {
 
 // END2END TESTS
 gulp.task('e2e', ['webdriverUpdate'], function e2e() {
-    return lint(config.js.e2e)
+    return gulp.src(config.js.e2e)
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
         .pipe(protractor({
             configFile: 'protractor.conf.js',
             args: ['--baseUrl', 'http://localhost:3000']
