@@ -5,7 +5,8 @@
     "browser" : true
   },
   "rules": {
-    "strict": [2, "never"],
+    "strict": 0,
+
     /**
      * ES6
      */

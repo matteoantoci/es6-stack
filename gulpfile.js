@@ -18,7 +18,8 @@ var config = require('./gulp.config');
 function lint(src) {
     return gulp.src(src)
         .pipe(eslint())
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 }
 
 // Webpack
@@ -103,7 +104,7 @@ gulp.task('spec', function spec() {
             basePath: config.paths.assets,
             action: 'watch'
         }))
-        .on('error', function(err) {
+        .on('error', function error(err) {
             throw err;
         });
 });
@@ -115,7 +116,7 @@ gulp.task('e2e', ['webdriverUpdate'], function e2e() {
             configFile: 'protractor.conf.js',
             args: ['--baseUrl', 'http://localhost:3000']
         }))
-        .on('error', function(e) {
-            throw e;
+        .on('error', function error(err) {
+            throw err;
         });
 });
