@@ -23,15 +23,13 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                exclude: /node_modules|bower_components/,
+                exclude: /node_modules/,
                 loader: 'babel-loader'
             },
             {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract('css-loader?sourceMap!sass-loader?sourceMap=true&sourceMapContents=true&')
                 +
-                'includePaths[]=' +
-                (path.resolve(__dirname, './bower_components')) + '&' +
                 'includePaths[]=' +
                 (path.resolve(__dirname, './node_modules'))
             },
@@ -45,7 +43,7 @@ module.exports = {
             {test: /\.png$/, loader: 'url?limit=10000&mimetype=image/png'}
         ],
         preLoaders: [
-            {test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules|bower_components/}
+            {test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules/}
         ]
     },
     plugins: [
@@ -53,7 +51,6 @@ module.exports = {
     ],
     resolve: {
         modulesDirectories: [
-            'bower_components',
             'node_modules'
         ]
     }
