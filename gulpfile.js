@@ -4,8 +4,8 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
-var rimraf = require('rimraf');
-var bs = require('browser-sync').create();
+var rimraf = require('gulp-rimraf');
+var bs = require('browser-sync').create('server');
 var eslint = require('gulp-eslint');
 var karma = require('gulp-karma');
 var protractor = require('gulp-protractor').protractor;
@@ -23,7 +23,7 @@ gulp.task('clean', function clean(cb) {
 });
 
 // WEBPACK
-function webpackBuild(conf, callback) {
+function webpackBuild(conf) {
     webpack(conf, function run(err, stats) {
         if (err) {
             throw new gutil.PluginError('webpack', err);
@@ -31,12 +31,12 @@ function webpackBuild(conf, callback) {
         gutil.log('webpack', stats.toString({
             colors: true
         }));
-        callback();
+        // callback();
     });
 }
 
 // DEFAULT - BrowserSync
-gulp.task('default', ['clean', 'webpack:build-dev'], function browserSync() {
+gulp.task('default', [], function browserSync() {
     var initOptions = {};
 
     if (config.browserSync.proxy) {
@@ -47,6 +47,8 @@ gulp.task('default', ['clean', 'webpack:build-dev'], function browserSync() {
         };
     }
 
+    gulp.start('clean');
+    gulp.start('webpack:build-dev');
     bs.init(initOptions);
     gulp.watch(config.watchedFiles, ['webpack:build-dev']);
     gulp.watch(config.paths.dist + '**/*.css').on('change', bs.stream);
@@ -55,7 +57,8 @@ gulp.task('default', ['clean', 'webpack:build-dev'], function browserSync() {
 });
 
 // WEBPACK PROD
-gulp.task('build', ['clean'], function wpBuild(callback) {
+gulp.task('build', [], function wpBuild() {
+    gulp.start('clean');
     var myConfig = Object.create(webpackConfig);
     myConfig.debug = false;
     myConfig.plugins = myConfig.plugins.concat(
@@ -67,7 +70,7 @@ gulp.task('build', ['clean'], function wpBuild(callback) {
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin()
     );
-    webpackBuild(myConfig, callback);
+    webpackBuild(myConfig);
 });
 
 // WEBPACK DEV

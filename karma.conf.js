@@ -18,10 +18,16 @@ module.exports = function (config) {
                         test: /\.js?$/,
                         exclude: /node_modules/,
                         loader: 'babel-loader'
-                    }
+                    },
+                    {test: /\.handlebars$/, loader: 'handlebars-loader'}
                 ]
             },
-            devtool: 'inline-source-map'
+            devtool: 'inline-source-map',
+            resolve: {
+                modulesDirectories: [
+                    'node_modules'
+                ]
+            }
         },
 
         webpackMiddleware: {
