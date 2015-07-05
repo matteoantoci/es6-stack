@@ -23,7 +23,6 @@
     "eslint-loader": "^0.14.1",
     "extract-text-webpack-plugin": "^0.8.1",
     "gulp": "latest",
-    "gulp-eslint": "latest",
     "gulp-jasmine": "latest",
     "gulp-karma": "latest",
     "gulp-protractor": "latest",

@@ -6,7 +6,6 @@ var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
 var rimraf = require('gulp-rimraf');
 var bs = require('browser-sync').create('server');
-var eslint = require('gulp-eslint');
 var karma = require('gulp-karma');
 var protractor = require('gulp-protractor').protractor;
 var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
@@ -83,9 +82,6 @@ gulp.task('webpack:build-dev', function wpBuildDev(callback) {
 // UNIT TESTS
 gulp.task('spec', function spec() {
     return gulp.src(config.js.spec)
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError())
         .pipe(karma({
             configFile: 'karma.conf.js',
             files: {
@@ -103,9 +99,6 @@ gulp.task('spec', function spec() {
 // END2END TESTS
 gulp.task('e2e', ['webdriverUpdate'], function e2e() {
     return gulp.src(config.js.e2e)
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError())
         .pipe(protractor({
             configFile: 'protractor.conf.js',
             args: ['--baseUrl', 'http://localhost:3000']

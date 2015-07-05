@@ -1,4 +1,4 @@
-module.exports = function (config) {
+module.exports = function karmaConfig(config) {
     config.set({
         basePath: '',
         frameworks: ['jasmine'],
@@ -20,6 +20,9 @@ module.exports = function (config) {
                         loader: 'babel-loader'
                     },
                     {test: /\.handlebars$/, loader: 'handlebars-loader'}
+                ],
+                preLoaders: [
+                    {test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules/}
                 ]
             },
             devtool: 'inline-source-map',
