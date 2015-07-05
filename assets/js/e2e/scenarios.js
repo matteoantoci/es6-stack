@@ -6,6 +6,8 @@ describe('my app', function() {
     it('should print "Hello world!""', function() {
         browser.get('index.html');
         expect(browser.getTitle()).toEqual('ES6 Stack');
-        expect(element(by.id('test')).getText()).toBe('Hello world!');
+        var buttons = element.all(by.css('.btn'));
+        expect(buttons.get(0).getText()).toBe('Hello');
+        expect(buttons.get(1).getText()).toBe('World');
     });
 });
