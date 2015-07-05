@@ -67,7 +67,7 @@ gulp.task('build', [], function wpBuild() {
             }
         }),
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin({sourceMap: false})
     );
     webpackBuild(myConfig);
 });
@@ -76,6 +76,7 @@ gulp.task('build', [], function wpBuild() {
 gulp.task('webpack:build-dev', function wpBuildDev(callback) {
     var myDevConfig = Object.create(webpackConfig);
     myDevConfig.devtool = '#source-map';
+    myDevConfig.watch = true;
     webpackBuild(myDevConfig, callback);
 });
 
@@ -84,10 +85,6 @@ gulp.task('spec', function spec() {
     return gulp.src(config.js.spec)
         .pipe(karma({
             configFile: 'karma.conf.js',
-            files: {
-                pattern: config.js.src,
-                watched: false
-            },
             basePath: config.paths.assets,
             action: 'watch'
         }))

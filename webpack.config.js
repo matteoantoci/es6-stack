@@ -5,6 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     watchOptions: {aggregateTimeout: 200},
     debug: true,
+    bail: true,
     entry: {
         /*
          Add here additional packages

@@ -1,7 +1,9 @@
+var webpack = require('webpack');
+
 module.exports = function karmaConfig(config) {
     config.set({
         basePath: '',
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine-jquery', 'jasmine'],
 
         colors: true,
 
@@ -12,13 +14,13 @@ module.exports = function karmaConfig(config) {
         },
 
         webpack: {
+            disableSha1: false,
+            disableLogging: false,
+            cache: true,
+            bail: true,
             module: {
                 loaders: [
-                    {
-                        test: /\.js?$/,
-                        exclude: /node_modules/,
-                        loader: 'babel-loader'
-                    },
+                    {test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader'},
                     {test: /\.handlebars$/, loader: 'handlebars-loader'}
                 ],
                 preLoaders: [
