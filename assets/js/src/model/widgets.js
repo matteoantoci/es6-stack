@@ -1,11 +1,12 @@
 import $ from 'jquery';
+import _ from 'underscore/underscore';
 
 let widget = {
-    init: function init(width, height) {
-        this.width = width || 50;
-        this.height = height || 50;
-        this.btnTemplate = require('../../../templates/button.handlebars')();
-        this.$elem = null;
+    init: function init(spec = {}) {
+        _.defaults(spec, {width: 50, height: 50});
+        this.width = spec.width;
+        this.height = spec.height;
+        return this;
     },
     insert: function insert($where) {
         if (this.$elem) {
@@ -19,15 +20,15 @@ let widget = {
 
 let button = Object.create(widget);
 
-button.setup = function setup(width, height, label) {
-    // delegated call
-    this.init(width, height);
-    this.label = label || 'Default';
-    this.$elem = $(this.btnTemplate).text(this.label);
+button.setup = function setup(spec = {}) {
+    _.defaults(spec, {label: 'Default'});
+    this.init(spec);
+    this.label = spec.label;
+    this.btnTemplate = require('../../../templates/button.handlebars')({label: this.label});
+    this.$elem = $(this.btnTemplate);
 };
 
 button.build = function build($where) {
-    // delegated call
     this.insert($where);
     this.$elem.click(this.changeLabel.bind(this));
 };
@@ -35,6 +36,5 @@ button.build = function build($where) {
 button.changeLabel = function changeLabel() {
     this.$elem.text('Button "' + this.label + '" clicked!');
 };
-
 
 export {widget, button};

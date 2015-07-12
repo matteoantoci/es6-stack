@@ -11,7 +11,8 @@
     "url": "https://github.com/matteoantoci/es6-stack/issues"
   },
   "dependencies": {
-    "node.normalize.scss": "^3.0.3"
+    "node.normalize.scss": "^3.0.3",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-core": "^5.5.4",
