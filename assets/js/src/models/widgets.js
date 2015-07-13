@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import _ from 'underscore/underscore';
+import dispatcher from '../dispatcher';
 
 let widget = {
     init: function init(spec = {}) {
@@ -30,7 +31,10 @@ button.setup = function setup(spec = {}) {
 
 button.build = function build($where) {
     this.insert($where);
-    this.$elem.click(this.changeLabel.bind(this));
+    this.$elem.click(() => {
+        this.changeLabel();
+        dispatcher.emit('button.clicked');
+    });
 };
 
 button.changeLabel = function changeLabel() {

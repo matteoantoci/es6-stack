@@ -1,7 +1,5 @@
-require('phantomjs-polyfill'); // phantomJS bind polyfill
 import $ from 'jquery';
-
-import {widget, button} from '../src/model/widgets';
+import {widget, button} from '../../src/models/widgets';
 
 describe('widget', function() {
     it('it sets width and height', function() {
@@ -28,6 +26,7 @@ describe('widget', function() {
         expect($test[0]).toBeInDOM();
         expect($test.width()).toEqual(100);
         expect($test.height()).toEqual(150);
+        $test.remove(); // Reset state
     });
 });
 
@@ -50,8 +49,11 @@ describe('button', function() {
         let buttonInstance = Object.create(button);
         buttonInstance.setup({width: 300, height: 200, label: 'Custom'});
         let $body = $(document.body);
-        buttonInstance.build($body);
+        let $tpl = $('<div id="tpl" />');
+        $body.append($tpl);
+        buttonInstance.build($tpl);
         buttonInstance.$elem.click();
         expect(buttonInstance.$elem.text()).toEqual('Button "Custom" clicked!');
+        $tpl.remove(); // Reset state
     });
 });
