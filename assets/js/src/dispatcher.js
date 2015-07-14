@@ -1,3 +1,3 @@
-import EventEmitter2 from 'eventemitter2';
+import EventEmitter from 'eventemitter3';
 
-export default new EventEmitter2({wildcard: true, maxlisteners: 20});
+export default new EventEmitter({wildcard: true, maxlisteners: 20});
