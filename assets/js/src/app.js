@@ -1,6 +1,8 @@
 require('../../scss/app.scss');
-import homeView from './views/home.js';
+import dispatcher from './dispatcher';
+import homeStore from './stores/buttonsStore';
+import homeView from './views/homeView';
 
 global.app = function main() {
-    homeView.render();
+    dispatcher.emit('pageLoad');
 };
