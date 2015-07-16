@@ -3,22 +3,43 @@ import dispatcher from '../dispatcher';
 import buttonsStore from '../stores/buttonsStore';
 import {button} from '../models/widgets';
 
-let $tpl = $('#home');
+let view = {
+    $el: null,
 
-let api = {
-    render: function render($tpl) {
-        $tpl.empty();
+    init: function init() {
+        this.$el = $('#home');
+        this.$el.on('click', '.btn', function() {
+            dispatcher.emit('action.buttonHasBeenClicked', $(this));
+        });
+    },
+
+    getButtons: function render() {
         let buttonStates = buttonsStore.getState();
-        Object.keys(buttonStates).forEach(function(id){
+        let buttons = [];
+        Object.keys(buttonStates).forEach((id) => {
             let btn = Object.create(button);
             btn.setup(id, buttonStates[id]);
-            btn.build($tpl);
+            buttons.push(btn);
         });
+        return buttons;
+    },
+
+    render: function render(){
+        let templateData = {
+            buttons: this.getButtons()
+        };
+        let template = require('../../../templates/home.handlebars')(templateData);
+        this.$el.empty().append($(template));
     }
 };
 
-dispatcher.on('buttonsStoreHasChanged', function() {
-    api.render($tpl);
+dispatcher.on('change.buttonsStore', () => {
+    view.render();
 });
 
-export default api;
+export default {
+    render: function render() {
+        view.init();
+        view.render();
+    }
+};

@@ -2,16 +2,20 @@ import dispatcher from '../../src/dispatcher.js';
 import buttonsStore from '../../src/stores/buttonsStore.js';
 
 describe('home view', function() {
-    it('needs to be initiated', function() {
-        expect(buttonsStore.getState()).toEqual({});
-    });
     it('stores buttons states', function() {
-        buttonsStore.init();
         expect(buttonsStore.getState().button1.label).toEqual('Hello');
     });
-    it('emits change event when setting state', function() {
-        spyOn(dispatcher, 'emit');
-        buttonsStore.init();
-        expect(dispatcher.emit).toHaveBeenCalledWith('buttonsStoreHasChanged');
+    it('change label when button has been clicked', function() {
+        let mockBtn = {
+            attr: function attr(){
+                return 'button1';
+            }
+        };
+        let expected = {
+            button1: {width: 250, height: 50, label: 'Clicked!'},
+            button2: {width: 250, height: 50, label: 'World!'}
+        };
+        dispatcher.emit('action.buttonHasBeenClicked', mockBtn);
+        expect(buttonsStore.getState()).toEqual(expected);
     });
 });
