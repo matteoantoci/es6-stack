@@ -8,8 +8,8 @@ let view = {
 
     init: function init() {
         this.$el = $('#home');
-        this.$el.on('click', '.btn', function() {
-            dispatcher.emit('action.buttonHasBeenClicked', $(this));
+        this.$el.on('click', '.btn', function buttonClicked() {
+            dispatcher.emit('action.buttonHasBeenClicked', $(this).attr('id'), 'Clicked!');
         });
     },
 
@@ -24,7 +24,7 @@ let view = {
         return buttons;
     },
 
-    render: function render(){
+    render: function render() {
         let templateData = {
             buttons: this.getButtons()
         };

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import {widget, button} from '../../src/models/widgets';
 
 describe('widget', function() {
