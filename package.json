@@ -44,6 +44,7 @@
     "karma-phantomjs-launcher": "latest",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "^1.5.1",
+    "lodash": "^3.10.1",
     "node-sass": "^3.1.2",
     "phantomjs-polyfill": "0.0.1",
     "sass-loader": "^1.0.2",

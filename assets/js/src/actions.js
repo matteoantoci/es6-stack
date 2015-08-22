@@ -16,6 +16,12 @@ export default {
             actionType: 'todo-add',
             model: todoItem
         });
+    },
+    updateTodo: function addTodo(todoItem) {
+        dispatcher.dispatch({
+            actionType: 'todo-update',
+            model: todoItem
+        });
     }
     // ... other actions ...
 };

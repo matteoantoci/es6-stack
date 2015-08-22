@@ -12,21 +12,25 @@ let TodoStore = backbone.Collection.extend({
     initialize: function initialize() {
         // we register a callback with the Dispatcher on init.
         this.dispatchToken = dispatcher.register(this.dispatchCallback.bind(this));
-        // populates the models
-        this.fetch();
+        // populates the models without triggering add events. Use it only if you can't put initial data in page.
+        this.fetch({reset: true});
     },
     dispatchCallback: function dispatchCallback(payload) {
         let actions = {
             // remove the Model instance from the Store.
             'todo-delete': function todoDelete() {
                 this.remove(payload.model);
+                // backbone.sync('delete', this);
             },
             'todo-add': function todoAdd() {
+                // payload.model.id = _.random(10000, 10000000);
                 this.add(payload.model);
+                // backbone.sync('create', this);
             },
             'todo-update': function todoUpdate() {
                 // do stuff...
                 this.add(payload.model, {'merge': true});
+                // backbone.sync('update', this);
             }
             // ... etc
         };
