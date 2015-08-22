@@ -1,3 +1,2 @@
-import EventEmitter2 from 'eventemitter2';
-
-export default new EventEmitter2({wildcard: true, maxlisteners: 20});
+let Dispatcher = require('flux').Dispatcher;
+export default new Dispatcher();

@@ -1,6 +1,9 @@
 require('../../scss/app.scss');
-import homeView from './views/home.js';
+import TodoEditableList from './views/TodoEditableList.js';
 
 global.app = function main() {
-    homeView.render();
+    let todoWidget = new TodoEditableList({el: '#todoWidget'});
+    todoWidget.render();
+    let todoWidgetClone = new TodoEditableList({el: '#todoWidgetClone'});
+    todoWidgetClone.render();
 };
