@@ -42,7 +42,7 @@ gulp.task('default', [], function browserSync() {
         initOptions.proxy = config.browserSync.proxy;
     } else {
         initOptions.server = {
-            baseDir: './'
+            baseDir: './public/'
         };
     }
 

@@ -8,11 +8,11 @@ var path = require('path');
 
 var paths = {
     assets: path.resolve('./assets/'),
-    dist: path.resolve('./dist/')
+    dist: path.resolve('./public/dist/')
 };
 
 var devProxy = {
-    host: "localhost",
+    host: 'localhost',
     port: 8080
 };
 
@@ -30,7 +30,7 @@ module.exports = {
         e2e: paths.assets + '/js/e2e/**/*.js'
     },
     browserSync: {
-        //proxy: devProxy.host + ":" + devProxy.port
+        // proxy: devProxy.host + ":" + devProxy.port
         proxy: false
     }
 };
