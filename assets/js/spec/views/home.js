@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import homeView from '../../src/views/home.js';
+import homeView from '../../src/components/home.js';
 
 describe('home view', function() {
     it('it renders home view', function() {

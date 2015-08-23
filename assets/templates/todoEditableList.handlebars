@@ -9,7 +9,7 @@
 </form>
 
 <ul>
-    {{#each todoStore}}
+    {{#each todos}}
     <li class="todo-item" data-id="{{this.id}}">
         Title: {{this.title}}
         <input type="checkbox" class="complete-checkbox" {{#if this.completed}}checked{{/if}} />

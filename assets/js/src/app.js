@@ -1,5 +1,5 @@
 require('../../scss/app.scss');
-import TodoEditableList from './views/TodoEditableList.js';
+import TodoEditableList from './components/TodoEditableList.js';
 
 global.app = function main() {
     let todoWidget = new TodoEditableList({el: '#todoWidget'});
