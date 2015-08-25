@@ -16,7 +16,7 @@ let TodoEditablelist = Component.extend({
     },
     handleTodoAdd: function handleTodoAdd(e) {
         e.preventDefault();
-        let todoItem = syphon.serialize(this);
+        let todoItem = syphon.serialize(this); // Serialize the form
         todoItem.id = Math.floor(Math.random() * 10000); // FIXME: this is useless with proper sync on server
         actions.addTodo(todoItem);
     },
@@ -28,8 +28,9 @@ let TodoEditablelist = Component.extend({
         };
         actions.updateTodo(todoItem);
     },
+    template: require('../../../templates/todoEditableList.mustache'),
     render: function render() {
-        let template = require('../../../templates/todoEditableList.handlebars')(this.state.toJSON());
+        let template = this.template(this.state.toJSON());
         this.$el.html(template);
     },
     events: {

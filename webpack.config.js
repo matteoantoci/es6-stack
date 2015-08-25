@@ -35,7 +35,7 @@ module.exports = {
                 (path.resolve(__dirname, './node_modules'))
             },
             {test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap')},
-            {test: /\.handlebars$/, loader: 'handlebars-loader'},
+            {test: /\.mustache/, loader: 'mustache'},
             {test: /\.woff$/, loader: 'url-loader?prefix=font/&limit=5000&mimetype=application/font-woff'},
             {test: /\.ttf$/, loader: 'file-loader?prefix=font/'},
             {test: /\.eot$/, loader: 'file-loader?prefix=font/'},

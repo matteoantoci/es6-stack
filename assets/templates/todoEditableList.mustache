@@ -9,10 +9,10 @@
 </form>
 
 <ul>
-    {{#each todos}}
-    <li class="todo-item" data-id="{{this.id}}">
-        Title: {{this.title}}
-        <input type="checkbox" class="complete-checkbox" {{#if this.completed}}checked{{/if}} />
+    {{#todos}}
+    <li class="todo-item" data-id="{{id}}">
+        Title: {{title}}
+        <input type="checkbox" class="complete-checkbox" {{#completed}}checked{{/completed}} />
     </li>
-    {{/each}}
+    {{/todos}}
 </ul>
