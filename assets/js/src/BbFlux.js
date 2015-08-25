@@ -25,6 +25,12 @@ let BackboneFluxCollection = {
     storeDidInitialize: function storeDidInitialize() {
         // Override me to handle initialize tasks, don't use initialize!
     },
+    subscribeComponent: function subscribeComponent(component, callback) {
+        // Use this to bind add/remove/reset event to component
+        component.listenTo(this, 'add remove change reset', function publishToComponents() {
+            callback.call(component);
+        });
+    },
     actions: {
         /*
           Override me to have actions. Eg:
@@ -38,15 +44,16 @@ let BackboneFluxCollection = {
 };
 
 let BackboneFluxView = {
-    state: {},
     initialize: function initialize() {
-        this.state = new BackboneModel();
-        this.listenTo(this.state, 'change', this.render);
+        this.state = new BackboneModel({defaults: this.getInitialState()}); // We set the initial state
+        this.listenTo(this.state, 'change', this.render); // Listen to state changes and re-render
         this.componentDidInitialize();
     },
     componentDidInitialize: function componentDidInitialize() {
         // Override me to handle initialize tasks, don't use initialize!
-        // Put here all your component-store subscriptions
+    },
+    getInitialState: function getInitialState() {
+        return {}; // Override here component initial state
     }
 };
 

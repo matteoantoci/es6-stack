@@ -6,17 +6,16 @@ import {Store} from '../BbFlux.js';
 let TodoStore = Store.extend({
     url: '/api/todos',
     storeDidInitialize: function storeDidInitialize() {
-        // populates the models without triggering add events. Use it only if you can't put initial data in page.
+        // populates the models without triggering add events.
+        // Use it only if you can't put initial data in page.
         this.fetch({reset: true});
     },
     actions: {
-        // remove the Model instance from the Store.
         'todo-delete': function todoDelete(payload) {
-            this.remove(payload.model);
+            this.remove(payload.model); // remove the Model instance from the Store.
             // backbone.sync('delete', this);
         },
         'todo-add': function todoAdd(payload) {
-            // payload.model.id = _.random(10000, 10000000);
             this.add(payload.model);
             // backbone.sync('create', this);
         },

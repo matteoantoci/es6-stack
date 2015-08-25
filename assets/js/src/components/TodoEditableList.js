@@ -2,7 +2,6 @@
  * Created by mantoci on 21/08/15.
  */
 import {Component} from '../BbFlux.js';
-import $ from 'jquery';
 import syphon from 'backbone.syphon';
 import actions from '../actions';
 import todoStore from '../stores/TodoStore';
@@ -10,9 +9,20 @@ import todoStore from '../stores/TodoStore';
 // *** Never change store state in views. Always use actions! ***
 let TodoEditablelist = Component.extend({
     componentDidInitialize: function componentDidInitialize() {
-        this.listenTo(todoStore, 'add remove reset', function updateState() {
-            this.state.set('todos', todoStore.toJSON());
-        });
+        todoStore.subscribeComponent(this, this.todosHaveChanged); // Subscribe to store changes
+    },
+    todosHaveChanged: function todosHaveChanged() {
+        this.state.set('todos', todoStore.toJSON());
+    },
+    todoTpl: require('../../../templates/todoEditableList.mustache'), // Cache the template
+    render: function render() {
+        let template = this.todoTpl(this.state.toJSON());
+        this.$el.html(template);
+        // return this; // Useful for subviews
+    },
+    events: {
+        'submit .todo-item-form': 'handleTodoAdd',
+        'click .complete-checkbox': 'handleTodoCheckboxClick'
     },
     handleTodoAdd: function handleTodoAdd(e) {
         e.preventDefault();
@@ -20,23 +30,14 @@ let TodoEditablelist = Component.extend({
         todoItem.id = Math.floor(Math.random() * 10000); // FIXME: this is useless with proper sync on server
         actions.addTodo(todoItem);
     },
-    handleTodoCheck: function handleTodoCheck(e) {
-        let $item = $(e.target).parents('.todo-item');
+    handleTodoCheckboxClick: function handleTodoCheckboxClick(e) {
+        let $item = this.$el.find(e.target).parents('.todo-item');
         let todoItem = {
             id: $item.data('id'),
             completed: e.target.checked
         };
         actions.updateTodo(todoItem);
     },
-    template: require('../../../templates/todoEditableList.mustache'),
-    render: function render() {
-        let template = this.template(this.state.toJSON());
-        this.$el.html(template);
-    },
-    events: {
-        'submit .todo-item-form': 'handleTodoAdd',
-        'click .complete-checkbox': 'handleTodoCheck'
-    }
 });
 
 export default TodoEditablelist;
