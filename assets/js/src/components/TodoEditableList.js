@@ -3,7 +3,7 @@
  */
 import {Component} from '../BbFlux.js';
 import syphon from 'backbone.syphon';
-import actions from '../actions';
+import actions from '../actions/todo';
 import todoStore from '../stores/TodoStore';
 
 // *** Never change store state in views. Always use actions! ***
@@ -37,7 +37,7 @@ let TodoEditablelist = Component.extend({
             completed: e.target.checked
         };
         actions.updateTodo(todoItem);
-    },
+    }
 });
 
 export default TodoEditablelist;

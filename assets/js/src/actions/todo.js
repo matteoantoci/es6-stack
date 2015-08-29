@@ -1,7 +1,7 @@
 /**
  * Created by mantoci on 21/08/15.
  */
-import {dispatcher} from './BbFlux.js';
+import {dispatcher} from './../BbFlux.js';
 
 export default {
     deleteTodo: function deleteTodo(todoItem) {
