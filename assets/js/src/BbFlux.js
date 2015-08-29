@@ -6,7 +6,6 @@ import _ from 'lodash';
 import Flux from 'flux';
 
 let dispatcher = new Flux.Dispatcher();
-let BackboneModel = backbone.Model.extend({});
 
 function dispatchCallback(payload) {
     if (typeof this.actions[payload.actionType] !== 'function') {
@@ -16,7 +15,7 @@ function dispatchCallback(payload) {
 }
 
 let BackboneFluxCollection = {
-    model: BackboneModel,
+    model: backbone.Model.extend({}),
     initialize: function initialize() {
         // We register a callback with the Dispatcher on init.
         this.dispatchToken = dispatcher.register(dispatchCallback.bind(this));
@@ -45,7 +44,8 @@ let BackboneFluxCollection = {
 
 let BackboneFluxView = {
     initialize: function initialize() {
-        this.state = new BackboneModel({defaults: this.getInitialState()}); // We set the initial state
+        let initialState = backbone.Model.extend({defaults: this.getInitialState()});
+        this.state = new initialState(); // We set the initial state
         this.listenTo(this.state, 'change', this.render); // Listen to state changes and re-render
         this.componentDidInitialize();
     },

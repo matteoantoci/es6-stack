@@ -8,21 +8,32 @@ import todoStore from '../stores/TodoStore';
 
 // *** Never change store state in views. Always use actions! ***
 let TodoEditablelist = Component.extend({
+    todoTpl: require('../../../templates/todoEditableList.mustache'), // Cache the template
+    events: {
+        'submit .todo-item-form': 'handleTodoAdd',
+        'click .complete-checkbox': 'handleTodoCheckboxClick'
+    },
+    getInitialState: function getInitialState(){
+      return {
+          title: "Loading...",
+          todos: []
+      }
+    },
     componentDidInitialize: function componentDidInitialize() {
         todoStore.subscribeComponent(this, this.todosHaveChanged); // Subscribe to store changes
     },
     todosHaveChanged: function todosHaveChanged() {
-        this.state.set('todos', todoStore.toJSON());
+        // Process data ...
+        let state = {
+            title: "Todo list",
+            todos: todoStore.toJSON()
+        };
+        this.state.set(state);
     },
-    todoTpl: require('../../../templates/todoEditableList.mustache'), // Cache the template
     render: function render() {
         let template = this.todoTpl(this.state.toJSON());
         this.$el.html(template);
-        // return this; // Useful for subviews
-    },
-    events: {
-        'submit .todo-item-form': 'handleTodoAdd',
-        'click .complete-checkbox': 'handleTodoCheckboxClick'
+        return this; // Useful for composing views
     },
     handleTodoAdd: function handleTodoAdd(e) {
         e.preventDefault();
